@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErrorLogger\ErrorLogger.csproj" />
+    <ProjectReference Include="..\UnhandledExceptionLogger\UnhandledExceptionLogger.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
@@ -8,6 +8,19 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <Title>ErrorLogger</Title>
+    <Authors>Julian Bechtold</Authors>
+    <Description>this is a very basic error logger which logs unhandled exceptions to a specified logfile in csv format.</Description>
+    <Copyright>MIT-Modern-Variant</Copyright>
+    <PackageProjectUrl>https://github.com/forReason/ErrorLogger</PackageProjectUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/forReason/ErrorLogger</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>error;unhandled-exception;log;logging;exception;debug</PackageTags>
+    <PackageReleaseNotes>capability to create a rolling log file in csv format. Will hook onto the unhandledException event handler</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT-Modern-Variant</PackageLicenseExpression>
+    <PackageId>UnhandledExceptionLogger</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
@@ -28,6 +41,17 @@
 
   <ItemGroup>
     <Content Include="favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

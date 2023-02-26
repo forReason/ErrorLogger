@@ -1,4 +1,4 @@
-﻿using ErrorLogger;
+﻿using UnhandledExceptionLogger;
 
 var logger = new Logger(
                 filePath: "C:\\logs\\error.csv",

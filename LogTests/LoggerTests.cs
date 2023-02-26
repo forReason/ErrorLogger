@@ -1,4 +1,4 @@
-﻿using ErrorLogger;
+﻿using UnhandledExceptionLogger;
 using System;
 using System.IO;
 using Xunit;

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ErrorLogger
+namespace UnhandledExceptionLogger
 {
     /// <summary>
     /// The Logger class is a utility for logging errors and exceptions to a file. 
