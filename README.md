@@ -56,7 +56,7 @@ If no parameters are specified, the logger loggs to the application directory in
 
 
 
-License
+#License
 ErrorLogger is released under the MIT License modern variant.
 
 
