@@ -1,4 +1,4 @@
-# ErrorLogger
+# UnhandledExceptionLogger
 A simplistic logger that hooks up to unhandled exceptions and logs them to a specified CSV file.
 
 # Installation
