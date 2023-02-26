@@ -17,7 +17,7 @@ You can also specify the log file path, the duration of the log history to keep,
 var logger = new Logger(filePath, historyDuration, maxLogSize_KB);
 ```
 
-Example
+# Example
 Here's an example of how you can use ErrorLogger in your project:
 
 ```
@@ -56,7 +56,7 @@ If no parameters are specified, the logger loggs to the application directory in
 
 
 
-#License
-ErrorLogger is released under the MIT License modern variant.
+# License
+ErrorLogger is released under the `MIT-MODERN-VARIANT` license.
 
 
