@@ -54,11 +54,11 @@ namespace ErrorLogger
             // if the log file exists, load it into the table. If it doesnt, create a new table
             if (LogPath.Exists)
             {
-                Log.LoadFromFile(LogPath.FullName);       
+                Log.LoadFromFile(LogPath.FullName,hasHeaders: true);       
             }
             else
             {
-                Log.SetColumnNames(new[] { "Timestamp", "error" });
+                Log.SetColumnNames(new[] { "Timestamp", "Exception Type", "Message", "Stack Trace" });
             }
             // set variables
             this.HistoryDuration = historyDuration;
@@ -95,9 +95,9 @@ namespace ErrorLogger
                     new[]
                     {
                         DateTime.Now.ToString(),
-                        "Unhandled exception: " + ex.Message
-                        + Environment.NewLine + Environment.NewLine +
-                        "Stack trace: " + ex.StackTrace
+                        ex.GetType().Name,
+                        ex.Message,
+                        ex.StackTrace
                     }
                 );
                 // delete old log entries if requested
@@ -131,7 +131,10 @@ namespace ErrorLogger
                 {
                     Log.WriteTableToFile(LogPath.FullName);
                 }
-                catch {}
+                catch (Exception ox)
+                {
+                    { }
+                }
             }
         }
     }
