@@ -22,15 +22,9 @@ namespace LogTests
             // Arrange
             var logger = new Logger();
             var ex = new Exception("Test exception");
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-            {
-                Exception ex = (Exception)args.ExceptionObject;
-                // Log the exception details
-                File.Create("Errtest");
-                { }
-            };
             // Act
             throw ex;
+            throw new Exception("Test exception");
         }
 
         [Fact]
