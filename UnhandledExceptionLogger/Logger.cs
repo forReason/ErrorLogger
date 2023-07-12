@@ -51,8 +51,17 @@ namespace UnhandledExceptionLogger
         /// <param name="filePath">The path to the log file.</param>
         /// <param name="historyDuration">The duration of the log history to keep. Old log entries will be deleted.</param>
         /// <param name="maxLogSize_KB">The maximum size of the log file in kilobytes (KB). If the log file exceeds this size, old log entries will be deleted.</param>
-        public Logger(string filePath = "errors.log", TimeSpan? historyDuration = null, long? maxLogSize_KB = null)
+        /// <param name="logLevel">The minimum severity which should be logged to file.</param>
+        /// <param name="debugOutLevel">The minimum severity which should be printed to console.</param>
+        public Logger(
+            string filePath = "errors.log", 
+            TimeSpan? historyDuration = null, 
+            long? maxLogSize_KB = null, 
+            Severity logLevel = Severity.Critical,
+            Severity debugOutLevel = Severity.Warning)
         {
+            LogLevel= logLevel;
+            DebugOutLevel= debugOutLevel;
             // convert path to fileinfo
             LogPath =  new FileInfo(filePath);
             // make sure the directory structure exists
@@ -99,11 +108,11 @@ namespace UnhandledExceptionLogger
         /// <param name="exceptionSeverity">the severity of the Exception, defaults to Severity.Critical</param>
         public void Log(Exception ex, Severity exceptionSeverity = Severity.Critical)
         {
-            if (exceptionSeverity > LogLevel)
+            if (exceptionSeverity >= LogLevel)
             {
                 AppendRecordToLog(severity: exceptionSeverity, title: ex.GetType().Name, message: ex.Message, stackTrace: ex.StackTrace);
             }
-            if (exceptionSeverity > DebugOutLevel)
+            if (exceptionSeverity >= DebugOutLevel)
             {
                 WriteDebug(severity: exceptionSeverity, title: ex.GetType().Name, message: ex.Message);
             }
@@ -116,11 +125,11 @@ namespace UnhandledExceptionLogger
         /// <param name="exceptionSeverity">the severity of the message, defaults to Severity.Info</param>
         public void Log(string title, string message, Severity exceptionSeverity = Severity.Info)
         {
-            if (exceptionSeverity > LogLevel)
+            if (exceptionSeverity >= LogLevel)
             {
                 AppendRecordToLog(severity: exceptionSeverity, title: title, message: message);
             }
-            if (exceptionSeverity > DebugOutLevel)
+            if (exceptionSeverity >= DebugOutLevel)
             {
                 WriteDebug(severity: exceptionSeverity, title: title, message: message);
             }
