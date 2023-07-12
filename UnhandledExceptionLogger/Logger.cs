@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace UnhandledExceptionLogger
 {
@@ -9,8 +10,16 @@ namespace UnhandledExceptionLogger
     /// The log file is stored in a QuickCsv.Net Table object, which allows for easy reading and writing of log data. 
     /// The Logger class is designed to be easily integrated into any .NET application, providing a simple and robust logging solution.
     /// </summary>
-    public class Logger
+    public partial class Logger
     {
+        /// <summary>
+        /// sets the loglevel based on which is decided if a message is logged to file or not
+        /// </summary>
+        public Severity LogLevel { get; set; } = Severity.Critical;
+        /// <summary>
+        /// sets the loglevel based on which is decided if a message is printed to console or not
+        /// </summary>
+        public Severity DebugOutLevel { get; set; } = Severity.Warning;
         /// <summary>
         /// The duration of the log history to keep. Old log entries will be deleted.
         /// </summary>
@@ -24,12 +33,12 @@ namespace UnhandledExceptionLogger
         /// <summary>
         /// The log data as a QuickCsv.Net.Table_NS.Table object.
         /// </summary>
-        public QuickCsv.Net.Table_NS.Table Log { get; set; } = new QuickCsv.Net.Table_NS.Table();
+        public QuickCsv.Net.Table_NS.Table LogHistory { get; set; } = new QuickCsv.Net.Table_NS.Table();
 
         /// <summary>
         /// the lock making sure that the file is only beeing accessed once
         /// </summary>
-        object LogLock = new object();
+        readonly object LogLock = new();
 
         /// <summary>
         /// the file location where the log should be written to (note, the directory should exist)
@@ -47,18 +56,19 @@ namespace UnhandledExceptionLogger
             // convert path to fileinfo
             LogPath =  new FileInfo(filePath);
             // make sure the directory structure exists
-            if (!Directory.Exists(LogPath.DirectoryName))
+            string? directoryName = LogPath.DirectoryName;
+            if (!string.IsNullOrEmpty(directoryName) && !Directory.Exists(directoryName))
             {
-                Directory.CreateDirectory(LogPath.DirectoryName);
+                Directory.CreateDirectory(directoryName);
             }
             // if the log file exists, load it into the table. If it doesnt, create a new table
             if (LogPath.Exists)
             {
-                Log.LoadFromFile(LogPath.FullName,hasHeaders: true);       
+                LogHistory.LoadFromFile(LogPath.FullName,hasHeaders: true);       
             }
             else
             {
-                Log.SetColumnNames(new[] { "Timestamp", "Exception Type", "Message", "Stack Trace" });
+                LogHistory.SetColumnNames(new[] { "Timestamp", "Severity" ,"Exception Type", "Message", "Stack Trace" });
             }
             // set variables
             this.HistoryDuration = historyDuration;
@@ -68,7 +78,7 @@ namespace UnhandledExceptionLogger
             {
                 Exception ex = (Exception)args.ExceptionObject;
                 // Log the exception details
-                LogException(ex);
+                Log(ex);
             };
         }
         /// <summary>
@@ -79,63 +89,54 @@ namespace UnhandledExceptionLogger
         {
             for (int r = i; r >= 0; r--)
             {
-                Log.RemoveRecord(r);
+                LogHistory.RemoveRecord(r);
             }
         }
         /// <summary>
         /// Logs an exception to the log file.
         /// </summary>
         /// <param name="ex">The exception to log.</param>
-        public void LogException(Exception ex)
+        /// <param name="exceptionSeverity">the severity of the Exception, defaults to Severity.Critical</param>
+        public void Log(Exception ex, Severity exceptionSeverity = Severity.Critical)
         {
-            lock (LogLock)
+            if (exceptionSeverity > LogLevel)
             {
-                // add new message
-                Log.AppendRecord(
-                    new[]
-                    {
-                        DateTime.Now.ToString(),
-                        ex.GetType().Name,
-                        ex.Message,
-                        ex.StackTrace
-                    }
-                );
-                // delete old log entries if requested
-                if (HistoryDuration != null || MaxLogSize_KB != null)
-                {
-                    long logSize = 0;
-                    for (int i = Log.Length-1; i >= 0; i--)
-                    {   
-                        if (HistoryDuration != null)
-                        {
-                            DateTime time = DateTime.Parse(Log.GetCell(i, 0));
-                            if (time < DateTime.Now-HistoryDuration)
-                            {
-                                TruncateLog(i);
-                                break;
-                            }
-                        }
-                        if (MaxLogSize_KB != null)
-                        {
-                            logSize += Encoding.UTF8.GetBytes(string.Join(' ' , Log.GetRecord(i))).Length;
-                            if (logSize / 1024 > MaxLogSize_KB)
-                            {
-                                TruncateLog(i);
-                                break;
-                            }
-                        }
-                    }
-                }
-                // write Log
-                try
-                {
-                    Log.WriteTableToFile(LogPath.FullName);
-                }
-                catch (Exception ox)
-                {
-                    { }
-                }
+                AppendRecordToLog(severity: exceptionSeverity, title: ex.GetType().Name, message: ex.Message, stackTrace: ex.StackTrace);
+            }
+            if (exceptionSeverity > DebugOutLevel)
+            {
+                WriteDebug(severity: exceptionSeverity, title: ex.GetType().Name, message: ex.Message);
             }
         }
+        /// <summary>
+        /// logs a message to console and file
+        /// </summary>
+        /// <param name="title">the message title</param>
+        /// <param name="message">the message</param>
+        /// <param name="exceptionSeverity">the severity of the message, defaults to Severity.Info</param>
+        public void Log(string title, string message, Severity exceptionSeverity = Severity.Info)
+        {
+            if (exceptionSeverity > LogLevel)
+            {
+                AppendRecordToLog(severity: exceptionSeverity, title: title, message: message);
+            }
+            if (exceptionSeverity > DebugOutLevel)
+            {
+                WriteDebug(severity: exceptionSeverity, title: title, message: message);
+            }
+        }
+        /// <summary>
+        /// Writes a debug message with a specific severity, title, message, and time.
+        /// </summary>
+        /// <param name="severity">The severity of the message.</param>
+        /// <param name="title">The title of the message.</param>
+        /// <param name="message">The message body.</param>
+        /// <param name="time">The time of the message. If null, the current system time will be used.</param>
+        private static void WriteDebug(Severity severity, string title, string message, DateTime? time = null)
+        {
+            string formattedTime = (time ?? DateTime.Now).ToString("yyyy-MM-dd HH:mm:ss");
+            Debug.WriteLine($"{formattedTime} {severity}: {title} - {message}");
+        }
+
     }
 }

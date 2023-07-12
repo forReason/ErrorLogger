@@ -10,17 +10,21 @@
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <Title>ErrorLogger</Title>
     <Authors>Julian Bechtold</Authors>
-    <Description>this is a very basic error logger which logs unhandled exceptions to a specified logfile in csv format.</Description>
+    <Description>this is a basic error logger which logs unhandled exceptions or user defined messages to a specified logfile in csv format and/or to console
+</Description>
     <Copyright>MIT-Modern-Variant</Copyright>
-    <PackageProjectUrl>https://github.com/forReason/ErrorLogger</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/forReason/UnhandledExceptionLogger</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/forReason/ErrorLogger</RepositoryUrl>
+    <RepositoryUrl>https://github.com/forReason/UnhandledExceptionLogger</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>error;unhandled-exception;log;logging;exception;debug</PackageTags>
-    <PackageReleaseNotes>capability to create a rolling log file in csv format. Will hook onto the unhandledException event handler</PackageReleaseNotes>
+    <PackageReleaseNotes>- added functionality of loglevels
+- updated naming to make more sense
+- added capability to log a message</PackageReleaseNotes>
     <PackageLicenseExpression>MIT-Modern-Variant</PackageLicenseExpression>
     <PackageId>UnhandledExceptionLogger</PackageId>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
