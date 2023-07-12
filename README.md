@@ -66,11 +66,11 @@ If no parameters are specified, the logger loggs to the application directory in
 Note that there can be issues in multithreaded applications for the logger to pick up the exceptions.
 
 # sample output
-| Date and Time | Exception Type | Description | Location |
-| --- | --- | --- | --- |
-| 2/26/2023 21:57 | DataMisalignedException | data is incorrect! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
-| 2/26/2023 21:58 | Exception | this is a test exeption! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
-| 2/26/2023 21:58 | DataMisalignedException | the data is misaligned! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
+| Date and Time | Severity | Exception Type | Description | Location |
+| --- | --- | --- | --- | --- |
+| 2/26/2023 21:57 | Critical | DataMisalignedException | data is incorrect! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
+| 2/26/2023 21:58 | Critical | Exception | this is a test exeption! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
+| 2/26/2023 21:58 | Critical | DataMisalignedException | the data is misaligned! | at Program.<Main>$(String[] args) in C:\Users\julia\OneDrive\Projects\Libraries\ErrorLogger\TestingApplication\Program.cs:line 9 |
 
 
 
