@@ -65,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="QuickCsv.Net" Version="1.0.1" />
+    <PackageReference Include="QuickCsv.Net" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
