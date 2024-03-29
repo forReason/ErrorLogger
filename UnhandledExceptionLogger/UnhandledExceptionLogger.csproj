@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
@@ -19,12 +19,18 @@
     <RepositoryUrl>https://github.com/forReason/UnhandledExceptionLogger</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>error;unhandled-exception;log;logging;exception;debug</PackageTags>
-    <PackageReleaseNotes>- added functionality of loglevels
+    <PackageReleaseNotes>2.0.0
+- improved performance in multithreaded scenarios
+- updated tests
+- added .Net 8
+
+1.1.0
+- added functionality of loglevels
 - updated naming to make more sense
 - added capability to log a message</PackageReleaseNotes>
     <PackageLicenseExpression>MIT-Modern-Variant</PackageLicenseExpression>
     <PackageId>UnhandledExceptionLogger</PackageId>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
